@@ -1,13 +1,14 @@
 #!/bin/bash  
 
 # this script takes as an argument the job id file and the jdl file
-# after at least one of the jobs are done, (or after some time) it checks to see
-# if any jobs have been aborted or returned fail status and resubmits them.
-# After at least 1/4 of the jobs are done, it cancels the scheduled jobs and resubmits
-# them, using a new jobID file. Continues until all the jobs are done.
+# if jobs are running it waits untill they finish
+# if after they finish there are still scheduled jobs it cancels and resubmits them
+# if jobs are not running it sleeps for 4 loops and then cancels and resubmits 3 times until they run
+# otherwise it exits
 
-DECOLORIZE='eval sed "s,\[;031m,,g" | sed "s,\[0m,,g" | awk "{printf(\"%s\n\",\$0)}" '
-HOWMANY='eval awk "/"$what"/{if(NF>10){print \$11}}" | cut -d "[" -f 2 | cut -d "]" -f 1 | awk "BEGIN{FS=\",\"}{print NF}" '
+#TODO: needs some tuning
+#DECOLORIZE='eval sed "s,\[;031m,,g" | sed "s,\[0m,,g" | awk "{printf(\"%s\n\",\$0)}" '
+#HOWMANY='eval awk "/"$what"/{if(NF>10){print \$11}}" | cut -d "[" -f 2 | cut -d "]" -f 1 | awk "BEGIN{FS=\",\"}{print NF}" '
 ################## functions ##################################################
 
 Handle (){
@@ -176,11 +177,9 @@ do
 	fi
 done
 
-date >> hello
+#date >> hello
 
-# get the output
-#rm -rf outputfile
-#mkdir outputfile
+
 touch resub
 matrixLength=${#jobMatrix[@]}
 for i in `seq  $matrixLength`
