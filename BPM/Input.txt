@@ -1,10 +1,8 @@
 #################################################################################################
-#								   				#
-#	Please fill in the fields relative to your test case and leave the rest empty. 		#
-#       If you wish for both mcl and phylogenetic clustering, fill in true on both fields.	#	 
-#       If you wish for the phylogenetic profile to be further clustered with mcl, 		#
-#       fill in true on the relative field.  					  		#
-#							   	 				#
+#								   				                                                                      #
+#	    Please fill in the fields relative to your test case and leave the rest empty.            #
+#     Select an option according to the guide below.                                            #
+#							   	 				                                                                      #
 #################################################################################################
 # Option: 1 for only mcl clustering
 # Option: 2 for only phylogenetic profile
