@@ -18,7 +18,7 @@ echo "number of organisms in the database: $numOfOrganisms"
 #go through all of the organisms
 #  rm tmp 
   #for this to work, the proteins for each genome should succeed one another
-  #and the genomes should be in the same order as in the map
+  #and the genomes should be in the same order as in the map?? test it a bit more
   gene=$(sed ''$geneToSelect'!d' $map | cut -f 2)
   #nextGene=$(sed ''$((lineNum + 1))'!d' $map | cut -f 2)
   #sed -n -r '/>'$gene'/,/>/p' $db >> F$gene
@@ -52,4 +52,4 @@ echo "number of organisms in the database: $numOfOrganisms"
 
 rm tmp
 #(head -n $firstSeqLine > f2.txt ; head -n $((lastSeqLine - firstSeqLine +1)) > f1.txt ; cat >> f2.txt) < R0
-#(head -n 24635 > f1.txt; cat > f2.txt) < R0  WOW
+#(head -n 24635 > f1.txt; cat > f2.txt) < R0  
