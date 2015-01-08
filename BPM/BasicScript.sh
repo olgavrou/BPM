@@ -61,7 +61,7 @@ Unzip $query
 query=$dataFolder
 if [[ $option == 1 ]]; then
 	# break the query to one sequence files and upload it to the grid
-	# if the queries are less than the maximum number of jobs then concatenate the query so        # each file contains one query, otherwise split into the maximum number of jobs
+	# each file contains one query, otherwise split into the maximum number of jobs
 
 	numOfFiles=$(grep ">" -c $query)
 	if [[ $numOfFiles -gt 500 ]]; then
@@ -79,7 +79,7 @@ else
 	dbsize=$(awk '/total letters/{print $0; exit;}' output.blastp | cut -d";" -f 2 | cut -d" " -f 2 | sed 's/,//g')
 	rm output.blastp pseudo.fasta
 	# the number of jobs will be the number of genomes that we have
-	# also upload the query file and information for the running script to act on
+	# also upload the query file and information for the running job to act on
 	numOfFiles=$(wc -l < $geneMap)
 	echo "$numOfFiles"
 	echo "$numOfFiles" > Info
@@ -107,6 +107,7 @@ sleep 5
 
 timesResubmited=0
 # look at resub file and check if/which nodes need resubmiting
+# maybe make this part a separate script
 resubmitJobs=$(wc -l < resub)
 while [[ $resubmitJobs != 0 ]]; do
 	if [[ $timesResubmited -lt 3 ]]; then
@@ -170,7 +171,7 @@ case "$option" in
    done
    ;;
 4) echo "Do It All"
-   # make a collection job and run them, one for simple mcl and the other for mcl of phyl profiles
+   # make a collection job and run it, one for simple mcl and the other for mcl of phyl profiles
    ./MakeJDLFile.sh "SimpleMcl" $numOfFiles "job1.jdl" $option
    ./MakeJDLFile.sh "PhylMcl" $numOfFiles "job2.jdl" $option
    mkdir jdl-collection
@@ -187,7 +188,6 @@ case "$option" in
 esac
 
 
-# TODO: if not removed do I need to do something further?
 ./RemoveFromSE.sh fastafiles.tar.gz
-# remove all the files that where created and are not needed
+# remove all the files that where created on ui and are not needed
 rm -rf fastafiles* Info jobID* job*.jdl status_logjobID* statusjobID* resub jobmcl jobResub* querySequences jdl-collection
