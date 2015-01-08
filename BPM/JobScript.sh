@@ -5,7 +5,7 @@ date
 
 /bin/hostname -f
 lcg-cr --version
-# _PARAM_ is the query part I need to download
+# _PARAM_ is the fasta file part I need to select
 param=${1}
 fastaFile=${2}
 toolbox=${3}
@@ -25,7 +25,7 @@ mv $toolbox/* .
 
 # download the fasta file
 lcg-cp lfn:/grid/see/olgavrou/$fastaFile.tar.gz file:$fastaFile.tar.gz
-# untar them
+# untar it
 tar -zxvf $fastaFile.tar.gz
 mv $fastaFile/* .
 
@@ -58,11 +58,11 @@ echo `grep -c ">" $query`
 echo "how many seq does database have?"
 echo `grep -c ">" $db`
 
-#make blast database from second file
+#make blast database 
 chmod +x makeblastdb
 ./makeblastdb -in $db -dbtype prot 
 echo "makeblastdb finished, start blastp"  
-#run the query against the database
+#blast the query against the database
 chmod +x blastp
 if [[ $option == 1 ]]; then
 	./blastp -query $query -db $db -out output.blastp -outfmt 6 
@@ -74,7 +74,7 @@ echo "blastp finished, make output.abc"
 cut -f 1,2,11 output.blastp > output.abc
 
 if [[ $option != 1 ]]; then
-	# make phylogenetic profile
+	# make abc file from which phylogenetic profiles will be created
 	# the genomes identifier
 	geneID=$(sed ''$param'!d' $map | cut -f 2)
 	awk 'BEGIN{theFS=FS;}{if($0 ~ />/){FS=">";$0=$0;print $2;FS=theFS;}}' $query | awk '{print $1}' >> querySequences
