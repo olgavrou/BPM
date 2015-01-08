@@ -1,10 +1,7 @@
 #!/bin/bash
 
 #
-# this script will be called from all the scripts to provide
-# the best database according to each execution case
-#
-# first argument is the folder where the data resides 
+# first argument is the folder where the data resides (decompressed folder) 
 # second argument is the map of genomes with their file names
 #
 
