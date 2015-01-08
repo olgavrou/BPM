@@ -1,0 +1,18 @@
+#################################################################################################
+#								   				#
+#	Please fill in the fields relative to your test case and leave the rest empty. 		#
+#       If you wish for both mcl and phylogenetic clustering, fill in true on both fields.	#	 
+#       If you wish for the phylogenetic profile to be further clustered with mcl, 		#
+#       fill in true on the relative field.  					  		#
+#							   	 				#
+#################################################################################################
+# Option: 1 for only mcl clustering
+# Option: 2 for only phylogenetic profile
+# Option: 3 for phylogenetic profile and the mcl clustering of the phyl. prof.
+# Option: 4 for all the above outputs
+
+query_file  leucinePathway.fasta 
+gene_map GenomeAll.txt
+raw_database 
+ready_database bacillus.faa
+option 1
