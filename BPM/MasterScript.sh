@@ -47,36 +47,36 @@ Cleanup(){
 	# arguments are the option and the number of files to be cleaned up (=number of jobs)
 	op=${1}
 	removeNum=${2}
-	./RemoveFromSE.sh "BPM_$timestamp/fastafiles.tar.gz"
-	./RemoveFromSE.sh "BPM_$timestamp/tools.tar.gz"
+	tools/RemoveFromSE.sh "BPM_$timestamp/fastafiles.tar.gz"
+	tools/RemoveFromSE.sh "BPM_$timestamp/tools.tar.gz"
 	rm -rf fastafiles* Info jobID* job*.jdl status_logjobID* statusjobID* secondjob* jdl-collection tools* $database
 	
 	case "$op" in
 	1)
    		for i in `seq $removeNum`
    		do
-        		./RemoveFromSE.sh "BPM_$timestamp/output$i.tar.gz"
+        		tools/RemoveFromSE.sh "BPM_$timestamp/output$i.tar.gz"
    		done
    	;;
 	2|3)
    		for i in `seq $removeNum`
    		do
-        		./RemoveFromSE.sh "BPM_$timestamp/phyl$i.tar.gz"
+        		tools/RemoveFromSE.sh "BPM_$timestamp/phyl$i.tar.gz"
    		done
  	;;
 	4|5)
    		for i in `seq $removeNum`
    		do
-        		./RemoveFromSE.sh "BPM_$timestamp/phyl$i.tar.gz"
-        		./RemoveFromSE.sh "BPM_$timestamp/output$i.tar.gz"
+        		tools/RemoveFromSE.sh "BPM_$timestamp/phyl$i.tar.gz"
+        		tools/RemoveFromSE.sh "BPM_$timestamp/output$i.tar.gz"
         		if [[ $op == 5 ]]; then
-                		./RemoveFromSE.sh "BPM_$timestamp/PhylProf$i.tar.gz"
+                		tools/RemoveFromSE.sh "BPM_$timestamp/PhylProf$i.tar.gz"
         		fi
    		done
   	;;
 	esac
-	./RemoveFromSE.sh "BPM_$timestamp/resultsphyl.tar.gz"
-	./RemoveFromSE.sh "BPM_$timestamp/resultssimple.tar.gz"
+	tools/RemoveFromSE.sh "BPM_$timestamp/resultsphyl.tar.gz"
+	tools/RemoveFromSE.sh "BPM_$timestamp/resultssimple.tar.gz"
 	#remove the folder
 	lfc-rm -r /grid/see/`whoami`/BPM_$timestamp
 	echo "Clean up is done, good bye"
@@ -93,7 +93,7 @@ if [[ -n $rawDatabase ]]; then
 	echo "Creating database file"
 	Unzip $rawDatabase
 	# raw database, make the database file
-	./MakeInputFile.sh $dataFolder
+	MakeFiles/MakeInputFile.sh $dataFolder
 	if [[ $? != 0 ]]; then
 		exit 2
 	fi
@@ -169,7 +169,7 @@ lfc-mkdir /grid/see/`whoami`/BPM_$timestamp
 mkdir fastafiles
 cp $query $database $geneMap Info fastafiles 2>/dev/null
 tar -zcvf fastafiles.tar.gz fastafiles > /dev/null 2&>1
-./Upload.sh fastafiles.tar.gz `whoami` $timestamp
+tools/Upload.sh fastafiles.tar.gz `whoami` $timestamp
 if [[ $? != 0 ]]; then
 	rm -rf Info fastafiles*
 	exit 3
@@ -178,22 +178,22 @@ echo "......."
 #### upload the tools folder ####
 tar -zcvf tools.tar.gz tools > /dev/null
 
-./Upload.sh tools.tar.gz `whoami` $timestamp
+tools/Upload.sh tools.tar.gz `whoami` $timestamp
 if [[ $? != 0 ]]; then
         rm -rf Info fastafiles* tools*
-	./RemoveFromSE.sh "BPM_$timestamp/fastafiles.tar.gz"
+	tools/RemoveFromSE.sh "BPM_$timestamp/fastafiles.tar.gz"
         exit 3
 fi
 
 #### make the jdl, submit the parametric job and follow it ####
-./MakeJDLFile.sh "Parametric" $((numOfFiles + 1)) "job.jdl" $option $timestamp
+MakeFiles/MakeJDLFile.sh "Parametric" $((numOfFiles + 1)) "job.jdl" $option $timestamp
 echo "submitting the $numOfFiles jobs"
 glite-wms-job-submit -o jobID -a job.jdl 2>/dev/null
 date +"%Y%m%d %T" > TimeParametricJobs # keep the time it started running 
 echo "the jobs have been submitted"
 sleep 5
 
-./HandlingParametricJobs.sh jobID job.jdl $timestamp $option
+HandleJobs/HandlingParametricJobs.sh jobID job.jdl $timestamp $option
 exitstatus=$?
 if [[ $exitstatus != 0 ]]; then
 #	Cleanup $option $stopNum &
@@ -208,37 +208,37 @@ date +"%Y%m%d %T" > TimeSimpleJob
 case "$option" in
 
 1) echo "Construct simple mcl clustering job is going to be submitted"
-   ./MakeJDLFile.sh "SimpleMcl" $numOfFiles "secondjob.jdl" $option $timestamp $I_or_E 
+   MakeFiles/MakeJDLFile.sh "SimpleMcl" $numOfFiles "secondjob.jdl" $option $timestamp $I_or_E 
    glite-wms-job-submit -o secondjob -a secondjob.jdl 2> /dev/null 
    echo "job has been submitted"
-   ./HandleSingleJob.sh secondjob secondjob.jdl "s" $option $timestamp
+   HandleJobs/HandleSingleJob.sh secondjob secondjob.jdl "s" $option $timestamp
    exitstatus=$?
    ;;
 2) echo "Construct simple phylogenetic profile job is going to be submitted"
-   ./MakeJDLFile.sh "PhylMcl" $numOfFiles "secondjob.jdl" $option $timestamp
+   MakeFiles/MakeJDLFile.sh "PhylMcl" $numOfFiles "secondjob.jdl" $option $timestamp
    glite-wms-job-submit -o secondjob -a secondjob.jdl 2> /dev/null 
    echo "job has been submitted"
-   ./HandleSingleJob.sh secondjob secondjob.jdl "s" $option $timestamp
+   HandleJobs/HandleSingleJob.sh secondjob secondjob.jdl "s" $option $timestamp
    exitstatus=$?
   ;;
 3) echo "Construct Phylogenetic Profile and its mcl clustering job is going to be submitted"
-   ./MakeJDLFile.sh "PhylMcl" $numOfFiles "secondjob.jdl" $option $timestamp
+   MakeFiles/MakeJDLFile.sh "PhylMcl" $numOfFiles "secondjob.jdl" $option $timestamp
    glite-wms-job-submit -o secondjob -a secondjob.jdl 2> /dev/null 
    echo "job has been submitted"
-   ./HandleSingleJob.sh secondjob secondjob.jdl "s" $option $timestamp
+   HandleJobs/HandleSingleJob.sh secondjob secondjob.jdl "s" $option $timestamp
    exitstatus=$?
    ;;
 4|5) echo "Do It All"
    # make a collection job and run them, one for simple mcl and the other for phyl profiles
    echo "Construct simple mcl clustering and Phylogenetic Profile job is going to be submitted"
-   ./MakeJDLFile.sh "SimpleMcl" $numOfFiles "secondjob1.jdl" $option $timestamp $I_or_E
-   ./MakeJDLFile.sh "PhylMcl" $numOfFiles "secondjob2.jdl" $option $timestamp
+   MakeFiles/MakeJDLFile.sh "SimpleMcl" $numOfFiles "secondjob1.jdl" $option $timestamp $I_or_E
+   MakeFiles/MakeJDLFile.sh "PhylMcl" $numOfFiles "secondjob2.jdl" $option $timestamp
    mkdir jdl-collection
    mv secondjob1.jdl secondjob2.jdl jdl-collection/
    # submit a job collection
    glite-wms-job-submit -o secondjob -a --collection jdl-collection 2> /dev/null 
    echo "job has been submitted"
-   ./HandleSingleJob.sh secondjob "jdl-collection" "c" $option $timestamp
+   HandleJobs/HandleSingleJob.sh secondjob "jdl-collection" "c" $option $timestamp
    exitstatus=$?
    ;;
 esac
@@ -255,5 +255,5 @@ echo "Job is done and cleanup will be running on background. You will be informe
 echo "It may take up to one hour to clean up for big files"
 echo "In the mean time you may access the generated output, but are not advised to close your shell session"
 echo "A small report will be found in Report.txt"
-./GenerateReport.sh $numOfFiles $option "TimeParametricJobs" "TimeSimpleJob"
+MakeFiles/GenerateReport.sh $numOfFiles $option "TimeParametricJobs" "TimeSimpleJob"
 exit 0

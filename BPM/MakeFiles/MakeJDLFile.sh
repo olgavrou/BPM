@@ -40,7 +40,7 @@ elif [[ $jobType == "SimpleMcl" || $jobType == "PhylMcl" ]]; then
 	else
 		echo "Arguments = \"$jobNum phyl $userName $option $timestamp\";" >> $file
 	fi
-	echo "InputSandbox = {\"SecondJobScript.sh\",\"Upload.sh\"};" >> $file
+	echo "InputSandbox = {\"SecondJobScript.sh\",\"tools/Upload.sh\"};" >> $file
 	echo "StdOutput = \"std.out\";" >> $file
 	echo "StdError = \"std.err\";" >> $file
 	echo "OutputSandbox = {\"std.out\",\"std.err\"};" >> $file
