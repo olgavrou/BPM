@@ -6,7 +6,7 @@
 # When all jobs are done, it calls the GetJobOutput script which in turn generates a "nodesToResubmit" file
 # If some jobs failed it resubmits them
 # It loops until all jobshave finished successfully or an error occurs
-#TODO: tackle "jobs are waiting" bug
+#TODO: rare "jobs are waiting" bug
 
 ################## functions ##################################################
 
