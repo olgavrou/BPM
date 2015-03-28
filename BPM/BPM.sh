@@ -93,7 +93,7 @@ fi
 
 ###  Make All Scripts Executable
 
-chmod +x MasterScript.sh JobScript.sh SecondJobScript.sh tools/* HandleJobs/* ParseOutput/*
+chmod +x MasterScript.sh JobScript.sh SecondJobScript.sh tools/* HandleJobs/* ParseOutput/* MakeFiles/*
 
 
 
