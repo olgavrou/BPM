@@ -8,14 +8,18 @@
 # Option: 3 for phylogenetic profile and the mcl clustering of the phyl. prof.
 # Option: 4 for all the above outputs
 # Option: 5 for all-vs-all
-query_file  
-gene_map list
-raw_database organismsWithID 
-ready_database 
-option 5
-# identity or evalue for mcl and phylogenetic? I/E
-I_or_E I
-# hit found or hit count for phylogenetic profiles? F/C
-F_or_C C
+
+query_file: leucinePathway.fasta 
+gene_map: List
+raw_database: bacillus.faa
+ready_database:
+option: 5
+
+# I for Identity or E for E-value
+I_or_E: I
+
+# F for binary or C for extended phylogenetic profiles
+F_or_C: C
+
 # enter your email address if you wish to be informed via email that the application is done
-email olgavrou@gmail.com
+email: olgavrou@gmail.com

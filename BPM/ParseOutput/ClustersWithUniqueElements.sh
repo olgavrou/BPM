@@ -1,10 +1,18 @@
 #!/bin/bash
 
-# this script takes the mcl file that contains the clusters, 
-# and the gene map file as arguments
-# it finds the clusters that don't have more than one elements of the same oragnism,
-# i.e. there are no two (or more elements) from the same organism
-# this script takes a long time for big input files 
+#-- ClustersWithUniqueElements.sh -------------------------------------------------------
+# 
+# This script finds the clusters (their ids) that don't have more than one element
+# of the same organism, i.e. there are no two (or more) elements from the same organism
+#
+# Arguments: 
+# 1. The mcl file that contains all the clusters
+# 2. The gene map file
+#
+# Output: UniqueElementClusters.txt
+#
+#----------------------------------------------------------------------------------------
+
 
 mclfile=${1}
 map=${2}

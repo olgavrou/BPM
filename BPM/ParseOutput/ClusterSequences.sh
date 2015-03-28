@@ -1,13 +1,26 @@
 #!/bin/bash
 
-# this script takes as arugments the cluster ID we are interested in, the mcl file that contains the clusters and 
-# the fasta file/s that hold the sequences
-# returns a file named ClusterSequences<clusterNumber>.txt that contains all the protein sequences that belog to the cluster
+#-- ClusterSequences.sh -----------------------------------------------------------------
+#
+# This script returns the protein sequences of all the elements that belong 
+# to a specific cluster
+#
+# Arguments:
+# 1. A specific cluster id
+# 2. The mcl file that contains all the clusters
+# 3. The fasta file that holds the sequences (e.g. tha database fasta file)
+# 4. Another fasta file that holds the sequences (e.g. the query fasta file) [optional]
+#
+# Output: Cluster<clusterID>Sequences.fasta
+#
+#----------------------------------------------------------------------------------------
+
 
 cluster=${1}
 mclfile=${2}
 fastafile1=${3}
 fastafile2=${4}
+
 timestamp=$( date +"%Y%m%d%H%M%S")
 
 echo "if the fasta files are large, this may take a while"

@@ -1,5 +1,19 @@
 #!/bin/bash
 
+#-- SpecificPhylogeneticProfile.sh --------------------------------------------
+#
+# This script returns the phylogenetic profiles of a specific
+# protein
+#
+# Arguments: 
+# 1. The file that contains the phylogenetic profiles
+# 2. The specific protein identifier
+#
+# Output: <proteinID>PhylogeneticProfile.txt
+#
+#------------------------------------------------------------------------------
+
+
 phylProfFile=${1}
 proteinID=${2}
 

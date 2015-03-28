@@ -1,7 +1,16 @@
 #!/bin/bash
 
-# this script takes the mcl file and a cluster id as arguments
-# it returns the specific cluster
+#-- ClusterElements.sh-----------------------------------------------
+# 
+# This script returns a specific cluster with its elements
+#
+# Arguments:
+# 1. mcl file with all the clusters
+# 2. a cluster id
+#
+# Output:  Cluster<clusterID>.txt
+# 
+#--------------------------------------------------------------------
 
 mclfile=${1}
 clusterID=${2}

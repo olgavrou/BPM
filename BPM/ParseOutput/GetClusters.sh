@@ -1,7 +1,18 @@
 #!/bin/bash
 
-# this script takes as arguments the genome or protein ID whose clusters we are looking for, and the mcl file that contains the cluster IDs
-# output is a file named <ID>_clusters.txt
+#-- GetClusters.sh ------------------------------------------------------------
+# 
+# This script returns the clusters (their ids) that contain a specific
+# protein or genome
+# 
+# Arguments: 
+# 1. The protein or geneome Identifier
+# 2. The mcl file that contains all the clusters
+#
+# Output: <ID>_clusters.txt
+#
+#------------------------------------------------------------------------------
+
 
 ID=${1}
 mclfile=${2}

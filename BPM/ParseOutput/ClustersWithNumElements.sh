@@ -1,7 +1,16 @@
 #!/bin/bash
 
-# this script takes as arguments the mcl file and a number
-# it returns the cluster ids of the clusters that have exactly that many elements 
+#-- ClustersWithNumElements.sh ----------------------------------------------------------
+#
+# This script returns the clusters (their ids) that have a specfic number of elements 
+#
+# Arguments:
+# 1. The mcl file that contains all the clusters
+# 2. The number of elements to look for
+#
+# Output: Clusters<numberofelements>Elements.txt
+#
+#----------------------------------------------------------------------------------------
 
 mclfile=${1}
 numberofelements=${2}

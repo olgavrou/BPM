@@ -1,11 +1,17 @@
-#!/bin/bash
+#!/bin/bash 
 
+#-- HandleSingleJob.sh -------------------------------------------------------------------- 
+# 
 # This script handles a single job or a signle job collection and collects its output
-# first argument is the jobid
-# second argument is the job jdl file or the collection job folder
-# third argument is "s" if it is one simple job or "c" if it is a collection
-# the fourth argument is the option selected
-# fifth argument is the timestamp of the folder where all the data is uploaded to
+# 
+# Arguments:
+# 1. The jobid
+# 2. The job jdl file or the collection job folder
+# 3. "s" if it is one simple job or "c" if it is a collection
+# 4. The option selected
+# 5. The timestamp of the folder where all the data is uploaded to
+#
+#------------------------------------------------------------------------------------------
 
 jobID=${1}
 jdl=${2}
@@ -13,104 +19,16 @@ jobType=${3}
 option=${4}
 timestamp=${5}
 
-run="true"
-fallAsleep=0
-sameJobRuns=0
-getOutput="false"
-echo "......."
-sleep 60
-while $run; do
-	# get the jobs status
-	if [[ $jobType == "s" ]]; then
-		currentStatus=$(glite-wms-job-status -i $jobID 2>/dev/null | grep "Current Status" | cut -d":" -f 2 | tr -d ' ')
-	elif [[ $jobType == "c" ]]; then
-		currentStatus=$(glite-wms-job-status -i $jobID 2>/dev/null | grep "Current Status" -m 1 | cut -d":" -f 2 | tr -d ' ')
-	fi
-	# check the status
-	if [[ $currentStatus == "Running" ]]; then
-		echo "Job is Running, wait for it to finish"
-		sleep 60
-	elif [[ $currentStatus == "Done(Success)" ]]; then
-		echo "Done, get the output"
-		getOutput="true"
-		run="false"
-	elif [[ $currentStatus == "Aborted" ]]; then
-		echo "Job Aborted"
-		run="false"
-		exit 5
-	elif [[ $currentStatus == "Cancelled" ||  $currentStatus == "Done(Exit Code !=0)"  || $currentStatus == "Cleared" ]]; then
-		echo "Job failed and will be resubmitted"
-		if [[ $sameJobRuns -lt 3 ]]; then                                      
-                      	echo "y" | glite-wms-job-cancel -i $jobID >> /dev/null 2>&1 
-                    	rm $jobID               
-			if [[ $jobType == "s" ]]; then                                       
-                   		glite-wms-job-submit -o "$jobID" -a "$jdl" 2>/dev/null 
-			elif [[ $jobType == "c" ]]; then
-				glite-wms-job-submit -o "$jobID" -a --collection "$jdl" 2>/dev/null
-			fi              
-                    	let sameJobRuns++                                            
-               		continue                                                       
-               	else
-                        echo "Something is wrong with the grid"                        
-	                run="false"
-			exit 4 
-             	fi    	
-	elif [[ $currentStatus == "Ready" ||  $currentStatus == "Submitted" || $currentStatus == "Scheduled" || $currentStatus == "Waiting" ]]; then
-		echo "Waiting for the job to start running..."
-		if [[ $fallAsleep -lt 10 ]]; then
-			echo "......."
-			let fallAsleep++
-			sleep 60
-			continue
-		else
-			echo "......."
-			fallAsleep=0
-			# resubmit
-			if [[ $sameJobRuns -lt 3 ]]; then
-				echo "y" | glite-wms-job-cancel -i $jobID >> /dev/null 2>&1
-				rm $jobID
-				if [[ $jobType == "s" ]]; then
-					glite-wms-job-submit -o "$jobID" -a "$jdl" 2>/dev/null
-				elif [[ $jobType == "c" ]]; then
-					# list the contents of the grid and if output has been generated run only one job from the collection
-					lcg-ls lfn:/grid/see/`whoami`/BPM_$timestamp > listoutput                    
-                                	foundSimple=$(grep "resultssimple.tar.gz" listoutput)
-                                	foundPhyl=$(grep "resultsphyl.tar.gz" listoutput)
-					if [[ -z $foundSimple && -z $foundPhyl ]]; then
-						glite-wms-job-submit -o "$jobID" -a --collection "$jdl" 2>/dev/null
-					elif [[ -z $foundSimple ]]; then
-						cp "$jdl"/"secondjob1.jdl" .
-						jdl="secondjob1.jdl"
-						jobType="s"
-						glite-wms-job-submit -o "$jobID" -a "$jdl" 2>/dev/null
-					elif [[ -z $foundPhyl ]]; then
-						cp "$jdl"/"secondjob2.jdl" .
-						jdl="secondjob2.jdl"
-						jobType="s"
-						glite-wms-job-submit -o "$jobID" -a "$jdl" 2>/dev/null
-					fi
-					rm listoutput	
-				fi
-				let sameJobRuns++
-                                echo "Job failed and will be resubmitted"
-                                continue
-			else
-				echo "Something is wrong with the grid"
-				run="false"
-				exit 4
-			fi	
-		fi
-#	else
-#		echo "Unknown error"
-#		exit 6
-	fi
-done
+################################################################################
+#                                                                              #
+#                               functions                                      #
+#                                                                              #
+################################################################################
 
-############### decompress function ###########
 Unzip(){
 # takes the name of the zipped file or folder as an input and decompresses it
         folder=${1}
-	outFolder=${2}
+        outFolder=${2}
         mkdir tmpdir
         mv $folder tmpdir
         cd tmpdir
@@ -122,23 +40,136 @@ Unzip(){
         rm -rf tmpdir
 }
 
-if [[ $getOutput == "true" ]]; then
-	export LCG_CATALOG_TYPE=lfc
-	export LFC_HOST=lfc.isabella.grnet.gr
-	export LCG_GFAL_INFOSYS=bdii.isabella.grnet.gr:2170
-	export LCG_GFAL_VO=see
-	# make folder for the output to be stored
-	if [[ -d "MyOutput" ]]; then
-		i=1
-		while [[ -d "MyOutput$i" ]]; do
-			let i++
-		done
-		mkdir "MyOutput$i"
-		outputFolder="MyOutput$i"
+Time(){
+# get the time difference of the two timestamps
+        timestamp1=${1}
+        timestamp2=${2}
+        t=$(date -d "$timestamp1" +%s)
+        t1=$(date -d "$timestamp2" +%s)
+        diff=$(expr $t1 - $t)
+
+}
+
+CancelAndResubmit(){
+	echo "y" | glite-wms-job-cancel -i $jobID >> /dev/null 2>&1
+      	rm $jobID
+       	jdlTmp=$( echo "$jdl" | cut -d"/" -f2)
+       	if [[ $jobType == "s" ]]; then
+   	    	error=$(glite-wms-job-submit -o "$jobID" -a $sf/"$jdlTmp" 2>$1 | grep "Error -")
+       	elif [[ $jobType == "c" ]]; then
+        	error=$(glite-wms-job-submit -o "$jobID" -a --collection $sf/"$jdlTmp" 2>&1 | grep "Error -")
+       	fi
+     
+	if [[ -z $error ]]; then
+        	echo "New job submitted"
+		return 0
 	else
-		mkdir MyOutput
-		outputFolder="MyOutput"
+		return 1
 	fi
+}
+
+################################################################################
+#                                                                              #
+#                            Control the job flow                              #
+#                                                                              #
+################################################################################
+
+sf="SessionFolder_$timestamp"
+run="true"
+fallAsleep=0
+sameJobRuns=0
+getOutput="false"
+echo "......."
+sleep 60
+startTime=$(date +"%Y%m%d %T")
+
+# run until job is done
+while $run; do
+
+	# get the jobs status
+	if [[ $jobType == "s" ]]; then
+		currentStatus=$(glite-wms-job-status -i $jobID 2>&1 | grep "Current Status" | cut -d":" -f 2 | tr -d ' ')
+	elif [[ $jobType == "c" ]]; then
+		currentStatus=$(glite-wms-job-status -i $jobID 2>&1 | grep "Current Status" -m 1 | cut -d":" -f 2 | tr -d ' ')
+	fi
+
+	timeNow=$(date +"%Y%m%d %T")
+        # get time difference
+        Time "$startTime" "$timeNow"
+        if [[ $diff -gt 7200 ]]; then # 2 hours 
+                # check if scheduled and if yes, cancel and resubmit
+		if [[ $currentStatus == "Scheduled" ]]; then
+			CancelAndResubmit
+			if [[ $? != 0 ]]; then
+				# if submit failed, try one more time
+				CancelAndResubmit
+			fi
+		fi
+	fi
+
+	# check the status
+	if [[ $currentStatus == "Running" ]]; then
+		echo "Job is Running, wait for it to finish"
+		sleep 100
+	elif [[ $currentStatus == "Done(Success)" ]]; then
+		echo "Done, get the output"
+		getOutput="true"
+		run="false"
+	elif [[ $currentStatus == "Aborted" ]]; then
+		#check again
+		if [[ $jobType == "s" ]]; then                                                             
+	                currentStatus=$(glite-wms-job-status -i $jobID 2>/dev/null | grep "Current Status" | cut -d":" -f 2 | tr -d ' ')
+	        elif [[ $jobType == "c" ]]; then                                                           
+        	        currentStatus=$(glite-wms-job-status -i $jobID 2>/dev/null | grep "Current Status" -m 1 | cut -d":" -f 2 | tr -d ' ')
+        	fi
+		if [[ $currentStatus == "Aborted" ]]; then 
+			echo "Job Aborted"
+			run="false"
+			exit 5
+	fi
+	elif [[ $currentStatus == "Cancelled" ||  $currentStatus == "Done(Exit Code !=0)"  || $currentStatus == "Cleared" ]]; then
+		echo "Job failed and will be resubmitted"
+		if [[ $sameJobRuns -lt 20 ]]; then                                      
+                    	CancelAndResubmit
+			if [[ $? != 0 ]]; then
+                                # if submit failed, try one more time
+                                CancelAndResubmit
+                        fi
+			let sameJobRuns++                                            
+               		continue                                                       
+               	else
+                        echo "Something is wrong with the grid"                        
+	                run="false"
+			exit 4 
+             	fi    	
+	elif [[ $currentStatus == "Ready" ||  $currentStatus == "Submitted" || $currentStatus == "Scheduled" || $currentStatus == "Waiting" ]]; then
+		echo "Waiting for the job to start running..."
+	else
+		error=$(glite-wms-job-status -i $jobID 2>&1 | grep "Unable to find" | grep "$jobID")
+		if [[ ! -z $error ]]; then
+			echo "Something is wrong with the grid"
+                       	exit 4
+
+		fi
+		sleep 60
+	fi
+done
+
+################################################################################
+#                                                                              #
+#                          Get the output                                      #
+#                                                                              #
+################################################################################
+
+if [[ $getOutput == "true" ]]; then
+	
+	export LFC_HOST=`lcg-infosites --vo see lfc`
+	export LCG_CATALOG_TYPE=lfc
+	export LCG_GFAL_VO=see
+	
+	mkdir Output_$timestamp
+	outputFolder="Output_$timestamp"
+
 	# get the output
  	case $option in
 	

@@ -1,8 +1,16 @@
 #!/bin/bash
 
+#-- Upload.sh -----------------------------------------------------------------
 #
-# this script uploads the file/folder that is given as an argument
-# it uploads it to a folder with name BPM_timestamp, where timestamp is given as an argument
+# This script uploads a specific file/folder that is given as an argument
+# it uploads it to a folder with name BPM_timestampi, if timestamp is given
+#
+# Arguments:
+# 1. file name to upload
+# 2. username
+# 3. timestamp [optional]
+#
+#------------------------------------------------------------------------------
 
 upload=${1}
 # user name

@@ -35,7 +35,7 @@
 -first argument: the mcl file that contains the clusters with their numeric id's
 -second argument: a cluster id
 -output: a file Cluster<clusterID>.txt that contains the elements of the specific cluster
--e.g. ./ClusterElements Out.mcl 5
+-e.g. ./ClusterElements.sh Out.mcl 5
 
 "5. ClusterSequences.sh"
 -first argument: a cluster id

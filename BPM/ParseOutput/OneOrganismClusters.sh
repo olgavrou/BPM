@@ -1,11 +1,22 @@
 #!/bin/bash
 
-# this script takes as arguments the mcl file that contains the clusters
-# and the gene map file, and returns a list with the ids of the clusters that contain
-# elements from only one gene/organism, for all the gene/organisms in the gene map
-
+#-- OneOrganismClusters.sh --------------------------------------------------------------
+# 
+# This script returns a list with the cluster ids that contain
+# elements from only one gene/organism, for all the gene/organisms in the gene map file
+#
+# Arguments: 
+# 1. the mcl file that contains all of the clusters
+# 2. the gene map
+#
+# Output: ClustersFromOneOrganism.txt
+#
+#----------------------------------------------------------------------------------------
+ 
 mclfile=${1}
 map=${2}
+
+
 timestamp=$( date +"%Y%m%d%H%M%S")
 echo "if the files are large, this may take a while"
 

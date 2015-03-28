@@ -1,7 +1,19 @@
 #!/bin/bash
 
-# this script takes the mcl file, the file that contains the phylogenetic profiles and a cluster id as arguments
-# it returns the phylogenetic profiles of the elements in each cluster
+#-- ClusterPhylProfiles.sh ------------------------------------------
+# 
+# This script returns the phylogenetic profiles of the elements of
+# of a specific cluster
+#
+# Arguments:
+# 1. The mcl file that contains the clusters
+# 2. The file that contains the phylogenetic profiles
+# 4. A specific cluster id
+#
+# Output:
+# Cluster<clusterID>ElementsPhylProf.txt
+#
+#--------------------------------------------------------------------
 
 mclfile=${1}
 phylProfFile=${2}

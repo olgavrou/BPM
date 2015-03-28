@@ -1,10 +1,16 @@
 #!/bin/bash
 
-# first argument is the database
-# second argument is the database to organisms map
-# the map has 2 colums, one with the organism name and one with the organism identifier in the database
-# third argument is the number (sequence in the map) of the gene that I want to select from the database
-
+#-- SelectDatabaseGene.sh --------------------------------------------------------------------
+#
+# This script selects the protein sequences of a specific gene, from a fasta file
+#
+# Arguments:
+# 1. The database fasta file
+# 2. The database to organisms map
+# 	the map has 1 column, with the organisms identifier in the database
+# 3. The number (sequence in the map) of the gene that I want to select from the database
+#
+#---------------------------------------------------------------------------------------------
 
 db=$1
 map=$2

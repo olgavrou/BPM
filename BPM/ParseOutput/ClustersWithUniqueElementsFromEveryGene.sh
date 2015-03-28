@@ -1,7 +1,17 @@
 #!/bin/bash
 
-# this script takes the mcl file that contains the clusters and the gene map file as arguments
-# it finds the clusters that contain EXACTLY ONE element from EACH gene
+#-- ClustersWithUniqueElementsFromEveryGene.sh ------------------------------------------
+#
+# This script finds the clusters (their ids) that contain EXACTLY ONE 
+# element form EACH gene
+#
+# Arguments:
+# 1. The mcl file that contains all the clusters
+# 2. the gene map file
+#
+# Output: UniqueElementFromEachGeneClusters.txt
+#
+#----------------------------------------------------------------------------------------
 
 mclfile=${1}
 map=${2}

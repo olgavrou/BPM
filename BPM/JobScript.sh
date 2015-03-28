@@ -1,7 +1,20 @@
-#!/bin/bash -x
+#!/bin/bash
 
-# This script blasts the query against the database file and according to the option 
-# parameter, works on the phylogenetic profiling or not.
+#-- JobScript.sh ------------------------------------------------------
+# 
+# This script blasts the query against the database 
+# file and according to the option parameter, works on the phylogenetic 
+# profiling or not
+#
+# Arguments:
+# 1. The parametric jobs unique_PARAM_
+# 2. The fastafile name
+# 3. The tools folder name
+# 4. The selected program option
+# 5. User name for down and uploading files to the grid
+# 6. Instance timestamp
+#
+#----------------------------------------------------------------------
 
 date +"%Y%m%d %T"
 
@@ -19,7 +32,24 @@ export LFC_HOST=`lcg-infosites --vo see lfc`
 export LCG_CATALOG_TYPE=lfc
 export LCG_GFAL_VO=see
 
+################################################################################
+#                                                                              #
+#                         Get Jobs tools and Info                              #
+#                                                                              #
+################################################################################
+
 echo "parameter: $param"
+echo "Check to see if jobs already ran"
+lcg-ls lfn:/grid/see/$userName/BPM_$timestamp/output$param.tar.gz
+if [[ $? == 0 ]]; then
+	echo "job already ran"	
+	exit
+fi
+lcg-ls lfn:/grid/see/$userName/BPM_$timestamp/phyl$param.tar.gz
+if [[ $? == 0 ]]; then
+        echo "job already ran"  
+        exit
+fi
 # download needed tools
 lcg-cp lfn:/grid/see/$userName/BPM_$timestamp/$toolbox.tar.gz file:$toolbox.tar.gz
 # untar them
@@ -64,6 +94,12 @@ echo `grep -c ">" $query`
 echo "how many seq does database have?"
 echo `grep -c ">" $db`
 
+################################################################################
+#                                                                              #
+#                               BLAST                                          #
+#                                                                              #
+################################################################################
+
 # make blast database
 chmod +x makeblastdb
 ./makeblastdb -in $db -dbtype prot 
@@ -84,6 +120,13 @@ if [[ $I_or_E == "E" ]]; then
 else
 	cut -f 1,2,3 output.blastp > output.abc
 fi
+
+################################################################################
+#                                                                              #
+#                        Phylogenetic Profiles                                 #
+#                                                                              #
+################################################################################
+
 echo "making phyl abc"
 date +"%Y%m%d %T"
 case "$option" in
@@ -94,7 +137,7 @@ case "$option" in
 	geneID=$(sed ''$param'!d' $map )
 	awk 'BEGIN{theFS=FS;}{if($0 ~ />/){FS=">";$0=$0;print $2;FS=theFS;}}' $query | awk '{print $1}' >> querySequences
 	while read line; do
-		found=$(grep "^$line" -c output.abc)
+		found=$(grep -w "^$line" -c output.abc)
 		if [[ $found == 0 ]]; then
 			echo -e "$line\t$geneID\t0" >> phyl$param.abc
 		else
@@ -114,7 +157,7 @@ case "$option" in
         geneNum=$(wc -l < $map)
         for i in `seq $geneNum` ; do
                 geneID=$(sed ''$i'!d' $map )
-                found=$(grep "^$line" output.abc | cut -f 2 | grep "$geneID" -c)
+                found=$(grep -w "^$line" output.abc | cut -f 2 | grep "$geneID" -c)
                 if [[ $found == 0 ]]; then
                         echo -e "$line\t$geneID\t0" >> phyl$param.abc
                 else
@@ -132,7 +175,7 @@ case "$option" in
 	echo "one liner"
 	date +"%Y%m%d %T"
 	while read line; do
-        	grep "$line" phyl$param.abc | cut -f 3 | sed 's/^//' | tr '\n' ' ' > tmp
+        	grep -w "$line" phyl$param.abc | cut -f 3 | sed 's/^//' | tr '\n' ' ' > tmp
         	echo "$line `cat tmp`"  >> PhylProf$param
         	rm tmp
 	done < querySequences
@@ -140,6 +183,13 @@ case "$option" in
 esac
 date +"%Y%m%d %T"
 echo "done making phyl abc"
+
+################################################################################
+#                                                                              #
+#                           Upload output                                      #
+#                                                                              #
+################################################################################
+
 # check to see if something whent wrong and the output file wasn't created
 ishere=$(ls | grep "output.abc")
 isEmpty=$(find . -empty -name "output.abc")
