@@ -191,17 +191,17 @@ fi
 chmod +x Upload.sh
 if [[ $fileType == "output" ]]; then
 	mv Out$fileType.mcl Outsimple.mcl
-	tar -zcvf resultssimpleF.tar.gz Outsimple.mcl
-	./Upload.sh resultssimpleF.tar.gz $userName $timestamp
+	tar -zcvf resultssimple.tar.gz Outsimple.mcl
+	./Upload.sh resultssimple.tar.gz $userName $timestamp
 else	
 	case "$option" in
 	
-	2|5) tar -zcvf resultsphylF.tar.gz PhylogeneticProfile.txt
-	     ./Upload.sh resultsphylF.tar.gz $userName $timestamp
+	2|5) tar -zcvf resultsphyl.tar.gz PhylogeneticProfile.txt
+	     ./Upload.sh resultsphyl.tar.gz $userName $timestamp
 	   ;;
 	3|4) mv Out$fileType.mcl Outphyl.mcl
-	     tar -zcvf resultsphylF.tar.gz Outphyl.mcl PhylogeneticProfile.txt
-	     ./Upload.sh resultsphylF.tar.gz $userName $timestamp
+	     tar -zcvf resultsphyl.tar.gz Outphyl.mcl PhylogeneticProfile.txt
+	     ./Upload.sh resultsphyl.tar.gz $userName $timestamp
 	   ;;
 	esac	
 	echo "done"
