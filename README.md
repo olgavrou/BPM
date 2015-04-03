@@ -45,7 +45,7 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
 * Input:
   The input required should be in the BPM folder, at the same level with the Input.txt file.
 
-  A. The input data that are reqired are:
+  <b>A.</b> The input data that are reqired are:
       1. Database file: a fasta file/files with the protein sequences that will consist the database of the protein alignment
         If one fasta file is provided it may either be compressed or not.
         If more than one fasta files are provided, they should all be in one folder (compressed folder or not)
@@ -63,7 +63,7 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
          Protein file:  >leuA
                         <protein sequence>
 
-  B. Configuration file:
+  <b>B.</b> Configuration file:
       The file Input.txt that is provided must be configured.
       It consists of the following fields:
 
