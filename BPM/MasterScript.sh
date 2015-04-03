@@ -123,7 +123,7 @@ if [[ $option == 1 || $option == 5 ]]; then
 	echo "......."
 	numOfFiles=$(grep ">" -c $sf/$query)
 	if [[ $numOfFiles -gt 500 ]]; then
-		numOfFiles=104
+		numOfFiles=500
 	fi
 	echo "$numOfFiles" > Info
 	echo "$query" >> Info
@@ -173,6 +173,7 @@ if [[ $? != 0 ]]; then
 	rm -rf fastafiles*
 	exit 3
 fi
+mv fastafiles.tar.gz $sf
 rm -rf fastafiles*
 
 echo "......."
@@ -322,4 +323,6 @@ fi
 
 echo "A small report will be found in Report.txt"
 MakeFiles/GenerateReport.sh $timestamp
+mv $sf/fastafiles.tar.gz Output_$timestamp
+rm -rf $sf
 exit 0
