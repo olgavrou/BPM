@@ -47,12 +47,15 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
   The input required should be in the BPM folder, at the same level with the Input.txt file.
 
   <b>A.</b> The input data that are reqired are:
+  
       1. Database file: a fasta file/files with the protein sequences that will consist the database of the protein alignment
         If one fasta file is provided it may either be compressed or not.
         If more than one fasta files are provided, they should all be in one folder (compressed folder or not)
+        
       2. Query File: a fasta file with the protein sequences that will consist the query of the protein alignment
         It may either be compressed or not.
         NOTE: in the case of an all-vs-all run, this file may be omitted
+        
       3. Genome map: a file that contains the genome identifiers whoes proteins consist the database.
         It may either be compressed or not.
     
