@@ -44,6 +44,7 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
 ---------------
 
 * Input:
+
   The input required should be in the BPM folder, at the same level with the Input.txt file.
 
   <b>A.</b> The input data that are reqired are:
@@ -59,7 +60,9 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
       3. Genome map: a file that contains the genome identifiers whoes proteins consist the database.
         It may either be compressed or not.
     
-    e.g. Genome map : BAMY-XXX
+    e.g. 
+    
+         Genome map : BAMY-XXX
     
          Database file: >BAMY-XXX-01
                         <protein sequence>
@@ -70,9 +73,10 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
                         <protein sequence>
 
   <b>B.</b> Configuration file:
+  
       The file Input.txt that is provided must be configured.
       It consists of the following fields:
-      NOTE: either raw_database or ready_database should be defined
+      
 
         <b>query_file:</b> <the exact name of the query file, as it is uploaded in the user interface, e.g. query.tar.gz> [if option is 5, this will be ignored]
         <b>gene_map:</b> <the exact name of the gene map file, as it is uploaded in the user interface, e.g. List.txt>
@@ -93,15 +97,19 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
 
             # enter your email address if you wish to be informed via email that the application is done
         email: olgavrou@gmail.com
+        
+        NOTE: either raw_database or ready_database should be defined
 
 * Preparation: 
    
    <b>A.</b> Proxy
+
          A valid proxy should be obtained in order for the application to run on HellasGrid.
          The "proxy-tools" command is recommended for obtaining a my-proxy certificate, and for the voms-proxy
          to be automatically renewed.
 
    <b>B.</b> Screen
+   
          It is advised that the application runs in screen mode, to avoid the application from being aborted
          due to connectivity issues.
          
@@ -122,9 +130,12 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
    
       A folder named Output_<timestamp> will be created at the same level as the Input.txt file. The database file,
       query file, genome map file, will be copied there. 
+
       The application output will be stored there, with a report containing information about the instance that ran.
       The report will be sent via email, if an email address is specified.
+
       The output can be:
+      
          Outsimple.mcl : it contains the clusters from the MCL execution, based on the BLAST output
          Outphyl.mcl   : it contains the clusters from the MCL execution, based on the phylogenetic profiles
          PhylogeneticProfiles.txt : it contains the phylogenetic profiles of the query proteins
