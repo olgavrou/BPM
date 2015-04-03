@@ -167,3 +167,55 @@ In the folder Example.tar.gz, you will find an example of a query, database and 
 The Input.txt file is configured to accept these files as an input.
 In the folders testcase1.tar.gz and testcase2.tar.gz, you can find examples of the
 generated output.
+
+
+------------------ 
+ FOLDER STRUCTURE
+------------------
+
+.
+├── BPM
+│   ├── BPM.sh
+│   ├── HandleJobs
+│   │   ├── HandleSingleJob.sh
+│   │   └── ParametricJobs.sh
+│   ├── Input.txt
+│   ├── JobScript.sh
+│   ├── MakeFiles
+│   │   ├── GenerateReport.sh
+│   │   ├── MakeInputFile.sh
+│   │   └── MakeJDLFile.sh
+│   ├── MasterScript.sh
+│   ├── ParseOutput
+│   │   ├── ClusterElements.sh
+│   │   ├── ClusterPhylProfiles.sh
+│   │   ├── ClusterSequences.sh
+│   │   ├── ClustersWithNumElements.sh
+│   │   ├── ClustersWithUniqueElementsFromEveryGene.sh
+│   │   ├── ClustersWithUniqueElements.sh
+│   │   ├── GetClusters.sh
+│   │   ├── OneOrganismClusters.sh
+│   │   ├── README.txt
+│   │   └── SpecificPhylogeneticProfile.sh
+│   ├── SecondJobScript.sh
+│   └── tools
+│       ├── blastp
+│       ├── CleanUp.sh
+│       ├── Download.sh
+│       ├── makeblastdb
+│       ├── RemoveFromSE.sh
+│       ├── SelectDatabaseGene.sh
+│       ├── SelectFastaFile.sh
+│       └── Upload.sh
+├── Example.tar.gz
+├── FlowCharts
+│   ├── JobScript.png
+│   ├── MainFlow.png
+│   ├── ParametricJobHandler.png
+│   └── SecondJob.png
+├── FolderStructure.txt
+├── README.md
+├── testcase1.tar.gz
+└── testcase2.tar.gz
+
+
