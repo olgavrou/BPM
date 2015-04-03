@@ -60,10 +60,12 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
         It may either be compressed or not.
     
     e.g. Genome map : BAMY-XXX
+    
          Database file: >BAMY-XXX-01
                         <protein sequence>
                         >BAMY-XXX-02
                         <protein sequence>
+                        
          Protein file:  >leuA
                         <protein sequence>
 
