@@ -5,6 +5,7 @@ CONTENTS OF THIS FILE
  * Requirements
  * Installation
  * Execution
+ * Example
  * Folder Structure
  
 ----------------
@@ -129,7 +130,7 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
       
 * Output:
    
-      A folder named Output_<timestamp> will be created at the same level as the Input.txt file. The database file,
+      A folder named Output_timestamp will be created at the same level as the Input.txt file. The database file,
       query file, genome map file, will be copied there. 
 
       The application output will be stored there, with a report containing information about the instance that ran.
@@ -145,17 +146,24 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
       
       Use the CleanUP.sh script in the tools folder, to delete all the files that are stored at the Storage Elements
       of HellasGrid. The files consist of the blast outputs, the phylogenetic profiles and the mcl clusters.
-      Usage: tools/CleanUp.sh <timestamp>
+      Usage: tools/CleanUp.sh timestamp
       
       Use the Download.sh script in the tools folder to download all the files that are stored at the Storage Elements
       of HellasGrid. The files consist of the blast outputs, the phylogenetic profiles and the mcl clusters. 
       They will be stored at a folder that the user specifies (will be created if it doesn't exist).
-      Usage: tools/Download.sh <timestamp> <foldername>
+      Usage: tools/Download.sh timestamp foldername
       
       
-      NOTE: <timestamp> is the beginning timestamp of each application run. It is used for the
-      SessionFolder_<timestamp>, the Output_<timestamp> folder, and to store the outputs at the Storage Elements 
+      NOTE: timestamp is the beginning timestamp of each application run. It is used for the
+      SessionFolder_timestamp, the Output_timestamp folder, and to store the outputs at the Storage Elements 
       of HellasGrid. Use it to clean up or download the produced files, and to track different executions.
 
 
+--------------- 
+ EXAMPLE
+---------------
 
+In the folder Example.tar.gz, you will find an example of a query, database and genome file.
+The Input.txt file is configured to accept these files as an input.
+In the folders testcase1.tar.gz and testcase2.tar.gz, you can find examples of the
+generated output.
