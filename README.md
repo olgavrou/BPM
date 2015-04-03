@@ -173,49 +173,6 @@ generated output.
  FOLDER STRUCTURE
 ------------------
 
-.
-├── BPM
-│   ├── BPM.sh
-│   ├── HandleJobs
-│   │   ├── HandleSingleJob.sh
-│   │   └── ParametricJobs.sh
-│   ├── Input.txt
-│   ├── JobScript.sh
-│   ├── MakeFiles
-│   │   ├── GenerateReport.sh
-│   │   ├── MakeInputFile.sh
-│   │   └── MakeJDLFile.sh
-│   ├── MasterScript.sh
-│   ├── ParseOutput
-│   │   ├── ClusterElements.sh
-│   │   ├── ClusterPhylProfiles.sh
-│   │   ├── ClusterSequences.sh
-│   │   ├── ClustersWithNumElements.sh
-│   │   ├── ClustersWithUniqueElementsFromEveryGene.sh
-│   │   ├── ClustersWithUniqueElements.sh
-│   │   ├── GetClusters.sh
-│   │   ├── OneOrganismClusters.sh
-│   │   ├── README.txt
-│   │   └── SpecificPhylogeneticProfile.sh
-│   ├── SecondJobScript.sh
-│   └── tools
-│       ├── blastp
-│       ├── CleanUp.sh
-│       ├── Download.sh
-│       ├── makeblastdb
-│       ├── RemoveFromSE.sh
-│       ├── SelectDatabaseGene.sh
-│       ├── SelectFastaFile.sh
-│       └── Upload.sh
-├── Example.tar.gz
-├── FlowCharts
-│   ├── JobScript.png
-│   ├── MainFlow.png
-│   ├── ParametricJobHandler.png
-│   └── SecondJob.png
-├── FolderStructure.txt
-├── README.md
-├── testcase1.tar.gz
-└── testcase2.tar.gz
+You can view the folder structure in the FolderStructure.txt file
 
 
