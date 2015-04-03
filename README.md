@@ -5,6 +5,7 @@ CONTENTS OF THIS FILE
  * Requirements
  * Installation
  * Execution
+ * Folder Structure
  
 ----------------
  INTRODUCTION
@@ -66,12 +67,13 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
   <b>B.</b> Configuration file:
       The file Input.txt that is provided must be configured.
       It consists of the following fields:
+      NOTE: either raw_database or ready_database should be defined
 
-        query_file: <the exact name of the query file, as it is uploaded in the user interface, e.g. query.tar.gz> [if option is 5, this will be ignored]
-        gene_map: <the exact name of the gene map file, as it is uploaded in the user interface, e.g. List.txt>
-        raw_database: <this field should be filled, if the database is provided as a folder with more than one fasta files; the exact name of the folder should be provided, e.g. Database.tar.gz>
-        ready_database: <this field should be filled, if the database is provided as one fasta file; the exact name of this file should be provided, e.g. database.faa>
-        option: 5 
+        <b>query_file:</b> <the exact name of the query file, as it is uploaded in the user interface, e.g. query.tar.gz> [if option is 5, this will be ignored]
+        <b>gene_map:</b> <the exact name of the gene map file, as it is uploaded in the user interface, e.g. List.txt>
+        <b>raw_database:</b> <this field should be filled, if the database is provided as a folder with more than one fasta files; the exact name of the folder should be provided, e.g. Database.tar.gz>
+        <b>ready_database:</b> <this field should be filled, if the database is provided as one fasta file; the exact name of this file should be provided, e.g. database.faa>
+        <b>option:</b> 5 
             # Option: 1 for only mcl clustering (the query file will be split for each job to process)
             # Option: 2 for only phylogenetic profile (the database file will be split for each job to process)
             # Option: 3 for phylogenetic profile and the mcl clustering of the phyl. prof. (the database file will be split for each job to process)
@@ -79,17 +81,64 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
             # Option: 5 for all-vs-all (the query file will be split for each job to process) 
 
             # I for Identity or E for E-value (choose the output of blastp)
-        I_or_E: I
+        <b>I_or_E:</b> I
   
             # F for binary or C for extended phylogenetic profiles (choose the type of phylogenetic profiles that will be constructed)
-        F_or_C: C
+        <b>F_or_C:</b> C
 
             # enter your email address if you wish to be informed via email that the application is done
         email: olgavrou@gmail.com
 
+* Preparation: 
+   
+   <b>A.</b> Proxy
+         A valid proxy should be obtained in order for the application to run on HellasGrid.
+         The "proxy-tools" command is recommended for obtaining a my-proxy certificate, and for the voms-proxy
+         to be automatically renewed.
 
+   <b>B.</b> Screen
+         It is advised that the application runs in screen mode, to avoid the application from being aborted
+         due to connectivity issues.
+         
+         
+   
+* Execution:
+      
+      Run the application like so:
 
+      <b>   ./BPM.sh Input.txt </b>
+      
+      A folder named SessionFolder_<timestamp> will be created at the same level as the Input.txt file.
+      DO NOT delete or modify the folder or it's contents while the application is running. It will be deleted
+      when the application has completed.
+      
+      
+* Output:
+   
+      A folder named Output_<timestamp> will be created at the same level as the Input.txt file. The database file,
+      query file, genome map file, will be copied there. 
+      The application output will be stored there, with a report containing information about the instance that ran.
+      The report will be sent via email, if an email address is specified.
+      The output can be:
+         Outsimple.mcl : it contains the clusters from the MCL execution, based on the BLAST output
+         Outphyl.mcl   : it contains the clusters from the MCL execution, based on the phylogenetic profiles
+         PhylogeneticProfiles.txt : it contains the phylogenetic profiles of the query proteins
 
+      The output may be further processed by the scripts in the ParseOutput folder.
+      
+      Use the CleanUP.sh script in the tools folder, to delete all the files that are stored at the Storage Elements
+      of HellasGrid. The files consist of the blast outputs, the phylogenetic profiles and the mcl clusters.
+      Usage: tools/CleanUp.sh <timestamp>
+      
+      Use the Download.sh script in the tools folder to download all the files that are stored at the Storage Elements
+      of HellasGrid. The files consist of the blast outputs, the phylogenetic profiles and the mcl clusters. 
+      They will be stored at a folder that the user specifies (will be created if it doesn't exist).
+      Usage: tools/Download.sh <timestamp> <foldername>
+      
+      
+      NOTE: <timestamp> is the beginning timestamp of each application run. It is used for the
+      SessionFolder_<timestamp>, the Output_<timestamp> folder, and to store the outputs at the Storage Elements 
+      of HellasGrid. Use it to clean up or download the produced files, and to track different executions.
 
 
 
