@@ -9,10 +9,10 @@
 # Option: 4 for all the above outputs
 # Option: 5 for all-vs-all
 
-query_file: leucinePathway.fasta 
-gene_map: List
-raw_database: bacillus.faa
-ready_database:
+query_file: query.fasta 
+gene_map: List.txt
+raw_database: 
+ready_database: database.faa
 option: 5
 
 # I for Identity or E for E-value
