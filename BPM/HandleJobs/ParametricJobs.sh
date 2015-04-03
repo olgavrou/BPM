@@ -189,8 +189,10 @@ CancelScheduled(){
         awk '/Parameters = {/{print;}' $statusLog | cut -d"{" -f2 | cut -d"}" -f1 | awk -F "," '{for(i=1;i<=NF;i++){print $i}}' | sed 's/"//g' > nodesToResubmit
 	
        	notCancelled="true"
-    	while $notCancelled; do
-		echo "Waiting for jobs to be cancelled"
+    	cancelCount=0
+        while $notCancelled && [[ $cancelCount -lt 5 ]]; do
+                echo "Waiting for jobs to be cancelled"
+                cancelCount=$(( cancelCount + 1))
 		sleep 60
 		echo ""
        		echo "y" | glite-wms-parametric-job-status -i $jobID > $statusLog 2>&1
