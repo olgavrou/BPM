@@ -105,8 +105,8 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
    <b>A.</b> Proxy
 
          A valid proxy should be obtained in order for the application to run on HellasGrid.
-         The "proxy-tools" command is recommended for obtaining a my-proxy certificate, and for the voms-proxy
-         to be automatically renewed.
+         The "proxy-tools" command is recommended for obtaining a my-proxy certificate, 
+         and for the voms-proxy to be automatically renewed.
 
    <b>B.</b> Screen
    
@@ -122,6 +122,7 @@ The BPM.sh script must be executable (chmod +x BPM.sh).
       <b>   ./BPM.sh Input.txt </b>
       
       A folder named SessionFolder_<timestamp> will be created at the same level as the Input.txt file.
+      
       DO NOT delete or modify the folder or it's contents while the application is running. It will be deleted
       when the application has completed.
       
