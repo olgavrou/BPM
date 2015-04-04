@@ -204,16 +204,34 @@ if [[ ! -z $ishere  && -z $isEmpty ]]; then
 	   ./Upload.sh output$param.tar.gz $userName $timestamp
 	   ;;
 	2|3) echo "Phylogenetic profile"
-	   echo "tar the output"
-	   tar -zcvf phyl$param.tar.gz phyl$param.abc
-	   echo "upload the phyl.abc file"
-	   ./Upload.sh phyl$param.tar.gz $userName $timestamp
+	   mapLineCount=$(cat $map | wc -l)
+           queryLineCount=$(cat querySequence | wc -l)
+           ppLineCount=$(cat phyl$param.abc | wc -l)
+           if [[ $ppLineCount == $((mapLineCount*queryLineCount))  ]]; then
+	   	echo "tar the output"
+	   	tar -zcvf phyl$param.tar.gz phyl$param.abc
+	   	echo "upload the phyl.abc file"
+	   	./Upload.sh phyl$param.tar.gz $userName $timestamp
+	   else
+	   	echo "Output not good"
+	   fi
+	   mv output.abc output$param.abc
+	   tar -zcvf output$param.tar.gz output$param.abc
+	   echo "upload the output.abc file"
+	   ./Upload.sh output$param.tar.gz $userName $timestamp
 	   ;;
 	4) echo "Do It All" 
 	   echo "tar the output"
-	   tar -zcvf phyl$param.tar.gz phyl$param.abc
-	   echo "upload the phylogenetic profile abc file"
-	   ./Upload.sh phyl$param.tar.gz $userName $timestamp
+	   mapLineCount=$(cat $map | wc -l)
+           queryLineCount=$(cat querySequence | wc -l)
+           ppLineCount=$(cat phyl$param.abc | wc -l)
+           if [[ $ppLineCount == $((mapLineCount*queryLineCount))  ]]; then
+	   	tar -zcvf phyl$param.tar.gz phyl$param.abc
+	   	echo "upload the phylogenetic profile abc file"
+	   	./Upload.sh phyl$param.tar.gz $userName $timestamp
+	   else
+	   	echo "Output not good"
+	   fi
 	   echo "tar abc output"
 	   mv output.abc output$param.abc
 	   tar -zcvf output$param.tar.gz output$param.abc
@@ -221,12 +239,18 @@ if [[ ! -z $ishere  && -z $isEmpty ]]; then
 	   ;;
 	5) echo "Do It All all-vs-all"
 	   echo "tar the output"
-	   tar -zcvf phyl$param.tar.gz phyl$param.abc
-	   echo "upload the phylogenetic profile abc file"
-           ./Upload.sh phyl$param.tar.gz $userName $timestamp
-	   echo "tar and upload the phylogenetic profile"
-	   tar -zcvf PhylProf$param.tar.gz PhylProf$param
-	   ./Upload.sh PhylProf$param.tar.gz $userName $timestamp
+           queryLineCount=$(cat querySequence | wc -l)
+           ppLineCount=$(cat PhylProf$param | wc -l)
+           if [[ $ppLineCount == $queryLineCount ]]; then
+	   	tar -zcvf phyl$param.tar.gz phyl$param.abc
+	   	echo "upload the phylogenetic profile abc file"
+           	./Upload.sh phyl$param.tar.gz $userName $timestamp
+	   	echo "tar and upload the phylogenetic profile"
+	   	tar -zcvf PhylProf$param.tar.gz PhylProf$param
+	   	./Upload.sh PhylProf$param.tar.gz $userName $timestamp
+	   else
+	   	echo "Output not good"
+	   fi
            echo "tar abc output"
            mv output.abc output$param.abc
            tar -zcvf output$param.tar.gz output$param.abc
