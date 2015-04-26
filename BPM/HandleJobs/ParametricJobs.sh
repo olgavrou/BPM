@@ -97,8 +97,7 @@ ResubmittableNodes(){
 
 	# investigate which of the jobs have completed already
 	while read line; do
-		#h lcg-ls lfn:/grid/see/`whoami`/BPM_$timestamp/output$line.tar.gz > $statusLog 2>&1
-		lcg-ls lfn:/grid/see/`whoami`/BPM_$timestamp/phyl$line.tar.gz > $statusLog 2>&1
+		lcg-ls lfn:/grid/see/`whoami`/BPM_$timestamp/output$line.tar.gz > $statusLog 2>&1
 		if [[ $? == 0 ]]; then
 			echo "job already ran"
 			grep -v -w "$line" tempresub > temp
@@ -280,8 +279,7 @@ AreAllJobsDone(){
 	lcg-ls lfn:/grid/see/`whoami`/BPM_$timestamp > listoutput
 	case $option in
 	1|4|5)
- 		#h areDone=$(grep "output" -c listoutput)
-		areDone=$(grep "phyl" -c listoutput)
+ 		areDone=$(grep "output" -c listoutput)
        	;;
 	2|3)
 		areDone=$(grep "phyl" -c listoutput)
@@ -304,8 +302,7 @@ ResubmitFailedJobs(){
 	# called right after AreAllJobsDone, so listoutput is updated
 	touch nodesToResubmit
 	for j in `seq $totalNumOfJobs`; do
-        	#h found=$(grep "output$j.tar.gz" listoutput || grep "phyl$j.tar.gz" listoutput)
-		found=$(grep "phyl$j.tar.gz" listoutput || grep "phyl$j.tar.gz" listoutput)
+        	found=$(grep "output$j.tar.gz" listoutput || grep "phyl$j.tar.gz" listoutput)
         	if [[ -z $found ]]; then
         	        echo "$j" >> nodesToResubmit
         	fi
