@@ -205,7 +205,7 @@ if [[ ! -z $ishere  && -z $isEmpty ]]; then
 	   ;;
 	2|3) echo "Phylogenetic profile"
 	   mapLineCount=$(cat $map | wc -l)
-           queryLineCount=$(cat querySequence | wc -l)
+           queryLineCount=$(cat querySequences | wc -l)
            ppLineCount=$(cat phyl$param.abc | wc -l)
            if [[ $ppLineCount == $((mapLineCount*queryLineCount))  ]]; then
 	   	echo "tar the output"
@@ -223,7 +223,7 @@ if [[ ! -z $ishere  && -z $isEmpty ]]; then
 	4) echo "Do It All" 
 	   echo "tar the output"
 	   mapLineCount=$(cat $map | wc -l)
-           queryLineCount=$(cat querySequence | wc -l)
+           queryLineCount=$(cat querySequences | wc -l)
            ppLineCount=$(cat phyl$param.abc | wc -l)
            if [[ $ppLineCount == $((mapLineCount*queryLineCount))  ]]; then
 	   	tar -zcvf phyl$param.tar.gz phyl$param.abc
@@ -239,7 +239,7 @@ if [[ ! -z $ishere  && -z $isEmpty ]]; then
 	   ;;
 	5) echo "Do It All all-vs-all"
 	   echo "tar the output"
-           queryLineCount=$(cat querySequence | wc -l)
+           queryLineCount=$(cat querySequences | wc -l)
            ppLineCount=$(cat PhylProf$param | wc -l)
            if [[ $ppLineCount == $queryLineCount ]]; then
 	   	tar -zcvf phyl$param.tar.gz phyl$param.abc

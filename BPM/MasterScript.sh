@@ -218,7 +218,7 @@ for i in `seq $loopNum`; do
         glite-wms-job-submit -o $sf/jobID$i -a $sf/job$i.jdl > $sf/statusLog 2>&1
         error=$(grep "Error -" $sf/statusLog)
         if [[ -z $error ]]; then
-                echo "Successfull job submition"
+                echo "Successfull job submission"
         else
                 echo "Something is wrong with the Grid"
 		for j in `seq $loopNum`; do
@@ -227,7 +227,7 @@ for i in `seq $loopNum`; do
                 exit 3
         fi
 
-        echo "Wait 2 minutes between job submitions..."
+        echo "Wait 2 minutes between job submissions..."
         sleep 120
 
         # next loop preparation
@@ -241,7 +241,7 @@ if [[ $residue -ne 0 ]]; then
         glite-wms-job-submit -o $sf/jobID$((i + 1)) -a $sf/job$(( i + 1)).jdl > $sf/statusLog 2>&1
         error=$(grep "Error -" $sf/statusLog)
         if [[ -z $error ]]; then
-                echo "Successfull job submition" 
+                echo "Successfull job submission" 
         else
                 echo "Something is wrong with the Grid"
                 exit 3
